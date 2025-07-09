@@ -1,0 +1,121 @@
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker network create bridge-net -d bridge
+3d9ae3d812b30fc4c75ce2add08c6435db7a8e83ffaf0979bcf2ff5e7240032a
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker network ls                         
+NETWORK ID     NAME         DRIVER    SCOPE
+99d3545b1079   bridge       bridge    local
+3d9ae3d812b3   bridge-net   bridge    local
+ef614c67fe00   host         host      local
+4a7b8b581126   none         null      local
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker volume create mysql-vol
+mysql-vol
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker volume ls              
+DRIVER    VOLUME NAME
+local     54b4e1243170707f509e99be8db808b1b84085456e3df59fa75cdb366fac427a
+local     72f69af02bd0e69b681ae6b325e62addd35f7912140f2bba9fae2a6b141d62ce
+local     94abdf611ddfeae60be00ffb67c5cdd837800d14c9f7fa03e3e956009a188272
+local     e4e85fab130bf2f842f2dcbb09058e3dcc4d7489f21b2140e2c948ff36811292
+local     fd6e064b55b8d673577983943f9dd7ee3b7f4287ae8f35a34d21304db116950b
+local     mysql-vol
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker images
+REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+flask-app     latest    d923967cf685   26 hours ago   1.47GB
+java-simple   latest    92b2f79878e7   2 days ago     938MB
+notes-app     latest    e1fce1889bc1   9 days ago     1.56GB
+ubuntu        latest    440dcf6a5640   2 weeks ago    117MB
+alpine        latest    8a1f59ffb675   5 weeks ago    12.8MB
+hello-world   latest    940c619fbd41   5 months ago   20.4kB
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker run -itd --name mysql --network bridge-net --volume mysql-vol:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=devops mysql:latest
+Unable to find image 'mysql:latest' locally
+latest: Pulling from library/mysql
+c55f07fe1b6e: Pull complete
+9db7a8f5c310: Pull complete
+515701765b17: Pull complete
+f4b2a1d21561: Pull complete
+610c16d564ee: Pull complete
+e6048afa6840: Pull complete
+56483034e3f1: Pull complete
+4d45e5094a07: Pull complete
+3b536f25676c: Pull complete
+Digest: sha256:f1049ce35b3986b84c08184de43a0b2109ae037a4a10a23ecf373a893daeadf7
+Status: Downloaded newer image for mysql:latest
+53ab478ccb6179459fd31b4b95ce8ea38b3deed9ecffc9a21c46be8fe6c10d5b
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker images                                                                                       REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+flask-app     latest    d923967cf685   26 hours ago   1.47GB
+java-simple   latest    92b2f79878e7   2 days ago     938MB
+notes-app     latest    e1fce1889bc1   9 days ago     1.56GB
+ubuntu        latest    440dcf6a5640   2 weeks ago    117MB
+alpine        latest    8a1f59ffb675   5 weeks ago    12.8MB
+mysql         latest    f1049ce35b39   2 months ago   1.17GB
+hello-world   latest    940c619fbd41   5 months ago   20.4kB
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker ps                                                                                           CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS             
+    NAMES
+53ab478ccb61   mysql:latest   "docker-entrypoint.s…"   50 seconds ago   Up 44 seconds   3306/tcp, 33060/tcp   mysql
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker build -t flask-mysql-app:latest .
+[+] Building 12.1s (13/13) FINISHED                                                  docker:desktop-linux
+ => [internal] load build definition from Dockerfile                                                 0.2s
+ => => transferring dockerfile: 692B                                                                 0.1s 
+ => [internal] load metadata for docker.io/library/python:3.9-slim                                   3.4s
+ => [auth] library/python:pull token for registry-1.docker.io                                        0.0s
+ => [internal] load .dockerignore                                                                    0.1s
+ => => transferring context: 2B                                                                      0.0s 
+ => [1/7] FROM docker.io/library/python:3.9-slim@sha256:c2a0feb07dedbf91498883c2f8e1e5201e95c91d413  0.2s
+ => => resolve docker.io/library/python:3.9-slim@sha256:c2a0feb07dedbf91498883c2f8e1e5201e95c91d413  0.2s 
+ => [internal] load build context                                                                    0.6s 
+ => => transferring context: 57.48kB                                                                 0.5s 
+ => CACHED [2/7] WORKDIR /app                                                                        0.0s
+ => CACHED [3/7] RUN apt-get update     && apt-get upgrade -y     && apt-get install -y gcc default  0.0s 
+ => CACHED [4/7] COPY requirements.txt .                                                             0.0s 
+ => CACHED [5/7] RUN pip install mysqlclient                                                         0.0s 
+ => CACHED [6/7] RUN pip install --no-cache-dir -r requirements.txt                                  0.0s
+ => [7/7] COPY . .                                                                                   0.2s 
+ => exporting to image                                                                               6.8s 
+ => => exporting layers                                                                              0.3s 
+ => => exporting manifest sha256:ffb237fff7e0b0d8ee011d3f3bb4092427c2fc459e124887f0dc313ec5d14410    0.0s 
+ => => exporting config sha256:efc1a720716523d28ef368d46e92b793611f348fd089d18b30c58d364593dfcb      0.0s 
+ => => exporting attestation manifest sha256:506f9f64844895d4224335d3b98c119db98e6501bc3cdaebd4d98d  0.1s 
+ => => exporting manifest list sha256:c197a87d475eb136a1572b87ca244008c975503e7507d7617997359b392df  0.0s 
+ => => naming to docker.io/library/flask-mysql-app:latest                                            0.0s 
+ => => unpacking to docker.io/library/flask-mysql-app:latest                                         6.0s 
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker images
+REPOSITORY        TAG       IMAGE ID       CREATED         SIZE
+flask-mysql-app   latest    c197a87d475e   2 minutes ago   561MB
+flask-app         latest    d923967cf685   26 hours ago    1.47GB
+java-simple       latest    92b2f79878e7   2 days ago      938MB
+notes-app         latest    e1fce1889bc1   9 days ago      1.56GB
+ubuntu            latest    440dcf6a5640   2 weeks ago     117MB
+alpine            latest    8a1f59ffb675   5 weeks ago     12.8MB
+mysql             latest    f1049ce35b39   2 months ago    1.17GB
+hello-world       latest    940c619fbd41   5 months ago    20.4kB
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker run -d --network bridge-net -p 5000:5000 -e MYSQL_HOST=mysql -e MYSQL_USER=root -e MYSQL_PASSWORD=root -e MYSQL_DB=devops flask-mysql-app:latest
+a509b6df79212cdd26aeee0f65a6bd42ddbb39e9256cd3c193584c6e590da390
+
+
+PS C:\Users\rsatpati\OneDrive - DXC Production\Ritwik Satpati\DevOps\Docker & DockerHub\flask-mysql-app-devops> docker ps
+CONTAINER ID   IMAGE                    COMMAND                  CREATED              STATUS              
+PORTS                                         NAMES
+a509b6df7921   flask-mysql-app:latest   "python app.py"          About a minute ago   Up About a minute   0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp   sweet_wilbur
+53ab478ccb61   mysql:latest             "docker-entrypoint.s…"   4 minutes ago        Up 4 minutes        3306/tcp, 33060/tcp                           mysql

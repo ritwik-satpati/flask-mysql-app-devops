@@ -1,0 +1,29 @@
+$ docker network create bridge-net -d bridge
+
+[Optional]
+$ docker network ls 
+
+$ docker volume create mysql-vol
+
+[Optional]
+$ docker volume ls
+
+[Optional]
+$ docker images
+$ docker ps
+
+$ docker run -itd --name mysql --network bridge-net --volume mysql-vol:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=devops mysql:latest
+
+[Optional]
+$ docker images
+$ docker ps
+
+$ docker build -t flask-mysql-app:latest .
+
+[Optional]
+$ docker images
+
+$ docker run -d --network bridge-net -p 5000:5000 -e MYSQL_HOST=mysql -e MYSQL_USER=root -e MYSQL_PASSWORD=root -e MYSQL_DB=devops flask-mysql-app:latest
+
+[Optional]
+$ docker ps
