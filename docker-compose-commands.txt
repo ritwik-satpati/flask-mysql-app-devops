@@ -1,0 +1,36 @@
+## Run Docker compose ?	
+(In that folder)
+
+$ docker compose up
+- If any priexsisting image cache is there. It will use it.
+
+$ docker compose up --build
+- Do not use image cache. Build from begining
+
+------------------------------------------------------------------------------------------
+
+## Stop Docker compose ?	
+(In that folder)
+
+$ docker compose stop
+- Stop Container
+
+$ docker compose down 
+- Stop Container, Delete Contailner, Delete Networks
+ 
+$ docker compose down --rmi all
+- Stop Container, Delete Contailner, Delete Networks, Remove Images
+
+$ docker compose down --rmi all -v
+- Stop Container, Delete Contailner, Delete Networks, Remove Images, Delete Volumes
+
+------------------------------------------------------------------------------------------
+
+## Check logs	
+(In that folder)
+
+$ docker compose logs -f
+- For full logs for all services 
+
+$ docker compose logs -f <service-name>
+- For full logs for any particular services"

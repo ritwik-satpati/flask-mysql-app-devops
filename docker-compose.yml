@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "devops"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-vol:/var/lib/mysql
+    networks:
+      - bridge-net
+    restart: always
+    healthcheck:
+      start_period: 10s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      timeout: 30s
+      interval: 10s
+      retries: 5
+
+  flask-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: flask-app:latest
+    container_name: flask-app
+    environment:
+      MYSQL_HOST: "mysql"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "root"
+      MYSQL_DB: "devops"
+    ports:
+      - "5000:5000"
+    networks:
+      - bridge-net
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: always
+    healthcheck:
+      start_period: 60s
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      timeout: 10s
+      interval: 10s
+      retries: 10
+
+volumes:
+  mysql-vol:
+    name: mysql-vol
+
+networks:
+  bridge-net:
+    name: bridge-net
+    driver: bridge
